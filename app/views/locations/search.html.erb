@@ -1,0 +1,6 @@
+<% @locations.each do |location| %>
+  <label class="ra" for="radio[<%= location['addressId'] %>]">
+    <input id="radio[<%= location['addressId'] %>]" type="radio" name="locations" value="<%= location['addressId'] %>" class="ra-f">
+    <span class="ra-l"><%= location['fullAddress'] %></span>
+  </label>
+<% end %>

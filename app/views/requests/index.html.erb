@@ -1,0 +1,3 @@
+<% @service_requests.each do |request| %>
+  <%= link_to request.service_name, request_path(request.service_code) %><br />
+<% end %>

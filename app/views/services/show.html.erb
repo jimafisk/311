@@ -1,0 +1,4 @@
+<h1><%= @service_request.service_code %></h1>
+<% @service_request.attributes.each do |attribute| %>
+  <%= render partial: "fields/field_#{attribute.datatype.downcase.underscore}" rescue render :partial => 'fields/field_text', locals: {attributes: attribute} %>
+<% end %>

@@ -1,0 +1,7 @@
+<div class="fg">
+  <%= label_tag attributes.code, attributes.description %>
+  <%= text_field_tag attributes.code %>
+  <% unless attributes.datatype_description.nil? %>
+    <div class="fg-h"><%= attributes.datatype_description %></div>
+  <% end %>
+</div>

@@ -1,3 +1,96 @@
-<% @service_requests.each do |request| %>
-  <%= link_to request.service_name, service_path(request.service_code) %><br />
-<% end %>
+<div class="r-c">
+  <div class="r-t">
+    <div class="r-s">1</div>
+    <div class="r-t-t">How can we help?</div>
+  </div>
+  <%= form_tag search_services_path, :id => 'search_services' do %>
+    <textarea id="description" name="query"></textarea>
+  <% end %>
+</div>
+
+<div id="found_requests" class="r-c" style="display: none">
+  <div class="r-t">
+    <div class="r-s">2</div>
+    <div class="r-t-t">Pick a service</div>
+  </div>
+  <ul id="found_requests_list">
+  </ul>
+</div>
+
+<div id="top_requests" class="r-c">
+  <div class="r-t">
+    <div class="r-t-t">Top Service Requests</div>
+  </div>
+  <ul>
+    <% @service_requests.each do |request| %>
+      <li><%= link_to request.service_name, service_path(request.service_code) %></li>
+    <% end %>
+  </ul>
+</div>
+
+<style>
+  body {
+    margin: 0;
+    font-family: Helvetica, sans-serif;
+  }
+
+  .r-c {
+    max-width: 20rem;
+    margin: 3rem auto;
+    position: relative;
+  }
+
+  .r-s {
+    border: 1px solid #ccc;
+    position: absolute;
+    left: -60px;
+    width: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+  }
+
+  .r-t {
+    margin-bottom: 0.5rem;
+  }
+
+  textarea {
+    height: 100px;
+    width: 100%;
+  }
+</style>
+
+<script>
+  $('#search_services').on('submit', function(ev) {
+    ev.preventDefault();
+
+    var el = $(this);
+
+    $.post(el.attr('action'), el.serialize(), function( data ) {
+      if (data.length > 0) {
+        $('#top_requests').hide();
+        $('#found_requests_list').html('');
+
+        for (var i = 0; i < data.length; i++) {
+          $('#found_requests_list').append('<li id="' + data[i].external_id + '"><a href="' + data[i].url + '">' + data[i].title + '</a></li>');
+        }
+
+        $('#found_requests').show()
+      } else {
+        $('#found_requests').hide()
+        $('#top_requests').show()
+      }
+    });
+  });
+
+  $('#description').on('keypress change paste', function() {
+    var el = $(this);
+
+    if (this.value.length > 10) {
+      el.parents('form').submit();
+    } else {
+      $('#found_requests').hide()
+      $('#top_requests').show()
+    }
+  });
+</script>

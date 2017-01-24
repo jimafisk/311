@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :locations
 
   resources :services do
+    post :search, on: :collection
     resources :requests
   end
 

@@ -31,6 +31,12 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 gem 'open311'
 
+# Use swiftype for search
+gem 'swiftype'
+
+gem 'highscore'
+gem 'bloomfilter-rb'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri

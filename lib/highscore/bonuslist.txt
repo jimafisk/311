@@ -1,0 +1,6 @@
+pothole
+repair
+sidewalk
+curb
+side
+walk

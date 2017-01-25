@@ -2,6 +2,8 @@
 
 The source code for the future [311.boston.gov](https://311.boston.gov).
 
+[![Build Status](https://travis-ci.com/CityOfBoston/311.svg?token=4Mk5JW5r1ifn1vTCrTF7&branch=master)](https://travis-ci.com/CityOfBoston/311)
+
 ## Developers
 
 This is a Rails 5 application that connects to the Swiftype API and the City of Boston's Open 311 API. In order to get setup you should:

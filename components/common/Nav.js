@@ -1,8 +1,6 @@
 import React from 'react';
 import { css } from 'glamor';
 
-import Link from 'next/link';
-
 const STYLE = {
   nav: css({
     backgroundColor: 'black',
@@ -23,10 +21,10 @@ const STYLE = {
 export default function Nav() {
   return (
     <div className={`nav ft-ll ${STYLE.nav}`}>
-      <Link href="/report" as="/"><a>Report a problem</a></Link>
-      <Link href="/lookup"><a>Case look up</a></Link>
-      <Link href="/go"><a>311 on the go</a></Link>
-      <Link href="/faq"><a>FAQ</a></Link>
+      <a>Report a problem</a>
+      <a>Case look up</a>
+      <a>311 on the go</a>
+      <a>FAQ</a>
     </div>
   );
 }

@@ -2,10 +2,6 @@
 
 import { handle } from 'redux-pack';
 
-import RequestSubmitGraphql from '../graphql/RequestSubmit.graphql';
-import type { RequestSubmitMutationVariables } from '../graphql/schema.flow';
-import type { Dispatch, Deps } from '.';
-
 export type Action =
   {| type: 'REQUEST_SET_DESCRIPTION', payload: string |} |
   {| type: 'REQUEST_SET_CODE', payload: string |} |
@@ -59,27 +55,27 @@ export const setRequestPhone = (phone: string): Action => ({
 // Submits the service request based on the current values in the store.
 //
 // This action creator uses redux-thunk in order to get access to getState().
-export const submitRequest = () => ({ loopbackGraphql }: Deps) => (dispatch: Dispatch, getState: () => { request: State }): Promise<any> => {
-  const request = getState().request;
-
-  if (!request.code) {
-    throw new Error('code is not set!');
-  }
-
-  const variables: RequestSubmitMutationVariables = {
-    code: request.code,
-    description: request.description,
-    firstName: request.firstName,
-    lastName: request.lastName,
-    email: request.email,
-    phone: request.phone,
-  };
-
-  return dispatch({
-    type: 'REQUEST_SUBMIT',
-    promise: loopbackGraphql(RequestSubmitGraphql, variables),
-  });
-};
+// export const submitRequest = () => ({ loopbackGraphql }: Deps) => (dispatch: Dispatch, getState: () => { request: State }): Promise<any> => {
+//   const request = getState().request;
+//
+//   if (!request.code) {
+//     throw new Error('code is not set!');
+//   }
+//
+//   const variables: RequestSubmitMutationVariables = {
+//     code: request.code,
+//     description: request.description,
+//     firstName: request.firstName,
+//     lastName: request.lastName,
+//     email: request.email,
+//     phone: request.phone,
+//   };
+//
+//   return dispatch({
+//     type: 'REQUEST_SUBMIT',
+//     promise: loopbackGraphql(RequestSubmitGraphql, variables),
+//   });
+// };
 
 const DEFAULT_STATE = {
   description: '',

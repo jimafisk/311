@@ -6,14 +6,13 @@ import { connect } from 'react-redux';
 
 import type { Dispatch, State } from '../../data/store';
 import { setRequestServiceCode, setRequestDescription } from '../../data/store/request';
-import { navigate } from '../../data/store/route';
-import type { ServiceSummary } from '../../data/types';
+import type { ServiceSummary } from '../../server/services/Open311';
 
 import ReportBox from './ReportBox';
 import ServiceList from './ServiceList';
 
 export type ExternalProps = {
-  serviceSummaries: ServiceSummary[],
+  summaries: ServiceSummary[],
 }
 
 export type ValueProps = {
@@ -34,11 +33,6 @@ const STYLE = {
 
 const setCodeAndContinue = (code) => () => async (dispatch) => {
   await dispatch(setRequestServiceCode(code));
-  await dispatch(navigate(
-    '/report',
-    { step: 'contact' },
-    '/report/contact',
-  ));
 };
 
 class ReportFormContainer extends React.Component {
@@ -49,12 +43,12 @@ class ReportFormContainer extends React.Component {
   }
 
   render() {
-    const { request, serviceSummaries, descriptionInputChanged } = this.props;
+    const { request, summaries, descriptionInputChanged } = this.props;
 
     return (
       <div className={STYLE.form}>
         <ReportBox text={request.description} onInput={descriptionInputChanged} />
-        <ServiceList serviceSummaries={serviceSummaries} onCodeChosen={this.onCodeChosen} />
+        <ServiceList summaries={summaries} onCodeChosen={this.onCodeChosen} />
       </div>
     );
   }

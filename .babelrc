@@ -1,12 +1,14 @@
 {
   "presets": [
-    "next/babel",
-    "latest"
+    "latest",
+    "react"
   ],
 
   "plugins": [
     "inline-import",
-    "transform-class-properties"
+    "transform-class-properties",
+    "transform-decorators-legacy",
+    "transform-runtime"
   ],
 
   "env": {

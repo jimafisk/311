@@ -8,3 +8,4 @@ module.file_ext=.graphql
 module.file_ext=.js
 module.file_ext=.jsx
 module.file_ext=.json
+esproposal.decorators=ignore

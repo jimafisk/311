@@ -9,7 +9,6 @@ import {
   setRequestLastName,
   setRequestEmail,
   setRequestPhone,
-  submitRequest,
 } from '../../data/store/request';
 
 import { navigate } from '../../data/store/route';
@@ -18,7 +17,7 @@ import ContactForm from './ContactForm';
 import type { ValueProps, ActionProps } from './ContactForm';
 
 const submitAndContinue = () => () => async (dispatch: Dispatch, getState: () => State) => {
-  await dispatch(submitRequest());
+  // await dispatch(submitRequest());
 
   if (!getState().request.submitError) {
     dispatch(navigate(

@@ -1,108 +1,41 @@
 // @flow
+/* eslint react/prefer-stateless-function: 0, global-require: 0 */
 
 import React from 'react';
-import Head from 'next/head';
-import type { Context } from 'next';
+import { initial } from 'rakt';
 
-import type { RequestAdditions } from '../server/next-handlers';
-
-import withStore from '../lib/mixins/with-store';
-import withStoreRoute from '../lib/mixins/with-store-route';
-
-import Nav from '../components/common/Nav';
 import FormDialog from '../components/common/FormDialog';
-import LocationMap from '../components/common/LocationMap';
 import ReportFormContainer from '../components/report/ReportFormContainer';
-import ServiceFormDialog from '../components/service/ServiceFormDialog';
 
-import makeLoopbackGraphql from '../data/graphql/loopback-graphql';
+@initial(async ({ done }) => {
+  try {
+    require('dotenv').config();
 
-import type { Service, ServiceArgs, ServiceSummary } from '../data/types';
-import LoadServiceGraphql from '../data/graphql/LoadServiceSummaries.graphql';
-import LoadServiceSummariesGraphql from '../data/graphql/LoadService.graphql';
+    const Open311 = require('../server/services/Open311').default;
+    const open311 = new Open311(process.env['311_ENDPOINT'], process.env['311_KEY']);
+    const summaries = await open311.serviceSummaries();
 
-type SummaryProps = {|
-  view: 'summaries',
-  serviceSummaries: ?ServiceSummary[],
-|};
-
-type ServiceProps = {|
-  view: 'service',
-  code: string,
-  service: ?Service,
-|};
-
-type InitialProps = SummaryProps | ServiceProps;
-
-class Report extends React.Component {
-  static async getInitialProps({ query, req, res }: Context<RequestAdditions>): Promise<InitialProps> {
-    const { code } = query;
-    const loopbackGraphql = makeLoopbackGraphql(req);
-
-    if (code) {
-      const service = (await loopbackGraphql(LoadServiceSummariesGraphql, ({ code }: ServiceArgs))).service;
-
-      if (!service && res) {
-        // eslint-disable-next-line no-param-reassign
-        res.statusCode = 404;
-      }
-
-      return {
-        view: 'service',
-        code,
-        service,
-      };
-    } else {
-      return {
-        view: 'summaries',
-        serviceSummaries: (await loopbackGraphql(LoadServiceGraphql)).services,
-      };
-    }
+    done(null, { summaries });
+  } catch (e) {
+    done(e);
   }
-
-  props: InitialProps;
-
+})
+class Report extends React.Component {
   render() {
+    const { data } = this.props;
+    if (!data) {
+      return <div>Loading…</div>;
+    }
+    const { summaries } = data;
+
     return (
       <div>
-        <Head>
-          <title>BOS:311 — {this.renderTitle()}</title>
-        </Head>
-
-        <Nav />
-        <LocationMap />
-
-        {this.renderContent()}
+        <FormDialog title="311: Boston City Services">
+          { <ReportFormContainer summaries={summaries} /> }
+        </FormDialog>
       </div>
     );
   }
-
-  renderTitle() {
-    switch (this.props.view) {
-      case 'summaries': return 'Report a Problem';
-      case 'service': return this.props.service ? this.props.service.name : 'Not found';
-      default: return '';
-    }
-  }
-
-  renderContent() {
-    switch (this.props.view) {
-      case 'summaries':
-        return (
-          <FormDialog title="311: Boston City Services">
-            <ReportFormContainer serviceSummaries={this.props.serviceSummaries} />
-          </FormDialog>
-        );
-
-      case 'service':
-        return (
-          <ServiceFormDialog service={this.props.service} />
-        );
-
-      default:
-        return null;
-    }
-  }
 }
 
-export default withStore(withStoreRoute(Report));
+export default Report;

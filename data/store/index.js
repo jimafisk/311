@@ -15,10 +15,6 @@ import type { State as KeysState, Action as KeysAction } from './keys';
 import type { State as RouteState, Action as RouteAction } from './route';
 import type { State as RequestState, Action as RequestAction } from './request';
 
-import type { RequestAdditions } from '../../server/next-handlers';
-import makeLoopbackGraphql from '../graphql/loopback-graphql';
-import type { LoopbackGraphql } from '../graphql/loopback-graphql';
-
 export type State = {|
   keys: KeysState,
   request: RequestState,
@@ -67,9 +63,7 @@ export type Action = InjectedAction | ReducableAction | ReduxPackAction;
 // thunks can return.
 export type Dispatch = (action: Action) => any;
 
-export type Deps = {|
-  loopbackGraphql: LoopbackGraphql,
-|}
+export type Deps = {};
 
 export type Store = ReduxStore<State, Action>;
 
@@ -92,7 +86,7 @@ export function makeStore(deps: ?Deps = null, initialState: ?State = null): Stor
 
   const enhancers = composeEnhancers(
     applyMiddleware(
-      inject(deps),
+      inject({}),
       thunk,
       reduxPackMiddleware,
     ),
@@ -115,16 +109,12 @@ export function makeStore(deps: ?Deps = null, initialState: ?State = null): Stor
  * server’s getInitialProps calls. Can be null when server rendering or on the
  * client.
  */
-export default function getStore(req: ?RequestAdditions, initialState: ?State = null): Store {
+export default function getStore(initialState: ?State = null): Store {
   if (process.browser && browserStore) {
     return browserStore;
   }
 
-  const deps = {
-    loopbackGraphql: makeLoopbackGraphql(req),
-  };
-
-  const store = makeStore(deps, initialState);
+  const store = makeStore({}, initialState);
 
   if (process.browser) {
     browserStore = store;

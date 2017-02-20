@@ -7,24 +7,24 @@ import HttpsProxyAgent from 'https-proxy-agent';
 import DataLoader from 'dataloader';
 
 // types taken from Open311
-export type Service = {|
+export type ServiceSummary = {|
   service_code: string,
   service_name: string,
-  description: string,
   metadata: boolean,
-  type: 'realtime' | 'batch' | 'blackbox',
-  keywords: string,
-  group: string,
-|}
+  description?: string,
+  type?: 'realtime' | 'batch' | 'blackbox',
+  keywords?: string,
+  group?: string,
+|};
 
 export type ServiceMetadataAttribute = {|
   required: boolean,
   datatype: 'Text' | 'Informational' | 'Picklist' | 'Boolean (checkbox)',
-  datatype_description: ?string,
-  order: ?number,
+  datatype_description?: ?string,
+  order?: ?number,
   description: string,
   code: string,
-  variable: boolean,
+  variable?: boolean,
   values?: {|
     key: string,
     name: string,
@@ -32,7 +32,7 @@ export type ServiceMetadataAttribute = {|
 |};
 
 export type ServiceMetadata = {|
-  service_code: string,
+  service_code?: string,
   attributes: ServiceMetadataAttribute[],
 |}
 
@@ -79,7 +79,7 @@ export default class Open311 {
   agent: any;
   endpoint: string;
   apiKey: string;
-  serviceDataLoader: DataLoader<string, ?Service>;
+  serviceDataLoader: DataLoader<string, ?ServiceSummary>;
 
   constructor(endpoint: ?string, apiKey: ?string) {
     if (!endpoint || !apiKey) {
@@ -99,7 +99,7 @@ export default class Open311 {
     // requests for service lookup to a single API call.
     this.serviceDataLoader = new DataLoader(async (codes: string[]) => {
       const servicesByCode = {};
-      (await this.services()).forEach((s) => { servicesByCode[s.service_code] = s; });
+      (await this.serviceSummaries()).forEach((s) => { servicesByCode[s.service_code] = s; });
       return codes.map((code) => servicesByCode[code] || null);
     });
   }
@@ -108,7 +108,7 @@ export default class Open311 {
     return url.resolve(this.endpoint, path);
   }
 
-  async services(): Promise<Service[]> {
+  async serviceSummaries(): Promise<ServiceSummary[]> {
     const params = new URLSearchParams();
     params.append('api_key', this.apiKey);
 
@@ -119,7 +119,7 @@ export default class Open311 {
     return processResponse(response);
   }
 
-  async service(code: string): Promise<?Service> {
+  async serviceSummary(code: string): Promise<?ServiceSummary> {
     return this.serviceDataLoader.load(code);
   }
 

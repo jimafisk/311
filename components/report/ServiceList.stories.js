@@ -7,55 +7,55 @@ import FormDialog from '../common/FormDialog';
 
 const SERVICE_SUMMARIES = [
   {
-    name: 'General Request',
-    code: 'SRTV-00000054',
-    hasMetadata: true,
+    service_name: 'General Request',
+    service_code: 'SRTV-00000054',
+    metadata: true,
   },
   {
-    name: 'Needle Removal',
-    code: 'SRTV-00000057',
-    hasMetadata: true,
+    service_name: 'Needle Removal',
+    service_code: 'SRTV-00000057',
+    metadata: true,
   },
   {
-    name: 'Park Lighting Issues',
-    code: 'SRTV-00000066',
-    hasMetadata: true,
+    service_name: 'Park Lighting Issues',
+    service_code: 'SRTV-00000066',
+    metadata: true,
   },
   {
-    name: 'Illegal Vending',
-    code: 'SRTV-00000080',
-    hasMetadata: true,
+    service_name: 'Illegal Vending',
+    service_code: 'SRTV-00000080',
+    metadata: true,
   },
   {
-    name: 'Empty Litter Basket',
-    code: 'SRTV-00000086',
-    hasMetadata: true,
+    service_name: 'Empty Litter Basket',
+    service_code: 'SRTV-00000086',
+    metadata: true,
   },
   {
-    name: 'Sidewalk Repair',
-    code: 'SRTV-00000092',
-    hasMetadata: true,
+    service_name: 'Sidewalk Repair',
+    service_code: 'SRTV-00000092',
+    metadata: true,
   },
   {
-    name: 'Missed Trash, Recycling, Yard Waste, Bulk Item',
-    code: 'SRTV-00000100',
-    hasMetadata: true,
+    service_name: 'Missed Trash, Recycling, Yard Waste, Bulk Item',
+    service_code: 'SRTV-00000100',
+    metadata: true,
   },
   {
-    name: 'Animal Control Generic',
-    code: 'SRTV-00000132',
-    hasMetadata: true,
+    service_name: 'Animal Control Generic',
+    service_code: 'SRTV-00000132',
+    metadata: true,
   },
   {
-    name: 'DEMO SERVICE TYPE',
-    code: 'SRTV-00000146',
-    hasMetadata: true,
+    service_name: 'DEMO SERVICE TYPE',
+    service_code: 'SRTV-00000146',
+    metadata: true,
   },
 ];
 
 storiesOf('ServiceList', module)
   .add('List', () => (
     <FormDialog>
-      <ServiceList serviceSummaries={SERVICE_SUMMARIES} onCodeChosen={action('Code Chosen')} />
+      <ServiceList summaries={SERVICE_SUMMARIES} onCodeChosen={action('Code Chosen')} />
     </FormDialog>
   ));

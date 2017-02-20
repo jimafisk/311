@@ -3,15 +3,13 @@
 import React from 'react';
 import { css } from 'glamor';
 
-import { GraphQLError } from '../../data/graphql/loopback-graphql';
-
 export type ValueProps = {
   firstName: string,
   lastName: string,
   email: string,
   phone: string,
   submitting: boolean,
-  submitError: ?(GraphQLError | Error),
+  submitError: ?Error,
 };
 
 export type ActionProps = {
@@ -62,9 +60,7 @@ export default function ContactForm(props: ValueProps & ActionProps) {
       <h2>CONTACT FORM</h2>
       <p>(will not be shared with public; leave blank to submit anonymously)</p>
 
-      { props.submitError &&
-        props.submitError instanceof GraphQLError &&
-        props.submitError.errors.map((e, i) => <div key={i} className={STYLE.error}>{e.message}</div>)}
+      { props.submitError && <div className={STYLE.error}>{props.submitError.toString()}</div> }
 
       <label className={STYLE.label}>
         <span>First Name</span>

@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
 import { css } from 'glamor';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
-import type { ServiceSummary } from '../../data/types';
+import type { ServiceSummary } from '../../server/services/Open311';
 
 const STYLES = {
   list: css({
@@ -38,7 +38,7 @@ const STYLES = {
 
 export default class ServiceList extends React.Component {
   props: {
-    serviceSummaries: ServiceSummary[],
+    summaries: ServiceSummary[],
     onCodeChosen: (string) => void,
   }
 
@@ -48,15 +48,15 @@ export default class ServiceList extends React.Component {
   }
 
   render() {
-    const { serviceSummaries } = this.props;
+    const { summaries } = this.props;
     return (
-      <ul className={STYLES.list}>{ serviceSummaries.map(this.renderServiceButton) }</ul>
+      <ul className={STYLES.list}>{ summaries.map(this.renderServiceButton) }</ul>
     );
   }
 
-  renderServiceButton = ({ name, code }: ServiceSummary) => (
+  renderServiceButton = ({ service_name: name, service_code: code }: ServiceSummary) => (
     <li className={STYLES.item} key={code}>
-      <Link href={`/report?code=${code}`} as={`/report/${code}`}><a className={STYLES.link}>{name}</a></Link>
+      <Link to={`/report/${code}`} className={STYLES.link}>{name}</Link>
     </li>
   );
 }

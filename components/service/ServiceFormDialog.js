@@ -4,10 +4,11 @@ import React from 'react';
 import { css } from 'glamor';
 import FormDialog from '../common/FormDialog';
 
-import type { Service } from '../../data/types';
+import type { ServiceSummary, ServiceMetadata } from '../../server/services/Open311';
 
 export type Props = {
-  service: ?Service,
+  summary: ?ServiceSummary,
+  metadata: ?ServiceMetadata,
 }
 
 const STYLE = {
@@ -17,9 +18,9 @@ const STYLE = {
   }),
 };
 
-function getTitle(service) {
-  if (service) {
-    return service.name;
+function getTitle(summary) {
+  if (summary) {
+    return summary.service_name;
   } else {
     return 'Service not found';
   }
@@ -52,38 +53,38 @@ function renderPicklistAttribute(attribute) {
 }
 
 function renderAttribute(attribute) {
-  switch (attribute.type) {
-    case 'INFORMATIONAL':
+  switch (attribute.datatype) {
+    case 'Informational':
       return renderInformationalAttribute(attribute);
-    case 'TEXT':
+    case 'Text':
       return renderTextAttribute(attribute);
-    case 'PICKLIST':
+    case 'Picklist':
       return renderPicklistAttribute(attribute);
     default:
       return null;
   }
 }
 
-function selectAttributes(service) {
-  if (service.metadata && service.metadata.attributes) {
-    return service.metadata.attributes;
+function selectAttributes(metadata) {
+  if (metadata && metadata.attributes) {
+    return metadata.attributes;
   } else {
     return [];
   }
 }
 
-function renderContent(service) {
-  if (service) {
-    return <div> {selectAttributes(service).map(renderAttribute)} </div>;
+function renderContent(metadata) {
+  if (metadata) {
+    return <div> {selectAttributes(metadata).map(renderAttribute)} </div>;
   } else {
     return null;
   }
 }
 
-export default function ServiceFormDialog({ service }: Props) {
+export default function ServiceFormDialog({ summary, metadata }: Props) {
   return (
-    <FormDialog title={getTitle(service)}>
-      { renderContent(service) }
+    <FormDialog title={getTitle(summary)}>
+      { renderContent(metadata) }
     </FormDialog>
   );
 }

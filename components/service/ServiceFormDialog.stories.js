@@ -6,5 +6,5 @@ import ServiceFormDialog from './ServiceFormDialog';
 
 storiesOf('ServiceFormDialog', module)
 .add('Not Found', () => (
-  <ServiceFormDialog service={null} />
+  <ServiceFormDialog summary={null} metadata={null} />
 ));
